@@ -8,6 +8,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import TodoItem from "../TodoItem/TodoItem";
 import TodosControls from "./TodosControls";
 import { useState } from "react";
+import { PulseLoader } from "react-spinners";
+import { closestCorners, DndContext } from "@dnd-kit/core";
 
 interface IUpdateTodoStatus {
   todoID: string;
@@ -58,29 +60,31 @@ const TodosList = () => {
   });
 
   if (isLoading) {
-    return <p>loading...</p>;
+    return <PulseLoader className={styled.loader} />;
   }
 
   return (
     <div className={styled.container}>
       {filteredTodos && filteredTodos?.length > 0 ? (
-        <ul className={styled.todosList}>
-          {filteredTodos?.map((todo) => (
-            <TodoItem
-              key={todo.id}
-              isCompletedMark={todo.isCompleted}
-              todoTitle={todo.title}
-              handleDeleteTodo={() => handleDeleteTodo(todo.id)}
-              handleAsCompleted={() =>
-                handleAsCompleted({
-                  todoID: todo.id,
-                  selectCompletedID: !todo.isCompleted,
-                  setNonActiveStatus: !todo.isActive,
-                })
-              }
-            />
-          ))}
-        </ul>
+        <DndContext collisionDetection={closestCorners}>
+          <ul className={styled.todosList}>
+            {filteredTodos?.map((todo) => (
+              <TodoItem
+                key={todo.id}
+                isCompletedMark={todo.isCompleted}
+                todoTitle={todo.title}
+                handleDeleteTodo={() => handleDeleteTodo(todo.id)}
+                handleAsCompleted={() =>
+                  handleAsCompleted({
+                    todoID: todo.id,
+                    selectCompletedID: !todo.isCompleted,
+                    setNonActiveStatus: !todo.isActive,
+                  })
+                }
+              />
+            ))}
+          </ul>
+        </DndContext>
       ) : (
         <p className={styled.emptyList}>There are no todos yet</p>
       )}

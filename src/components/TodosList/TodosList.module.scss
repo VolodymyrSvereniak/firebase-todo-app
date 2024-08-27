@@ -62,7 +62,7 @@
       }
 
       @media (max-width: 768px) {
-        padding-top: 6.25rem;
+        padding: 6.25rem 0 0 1.25rem;
       }
     }
 
@@ -78,8 +78,14 @@
       }
 
       @media (max-width: 768px) {
-        padding-bottom: 3.125rem;
+        padding: 0 0.625rem 3.125rem 0  ;
       }
     }
   }
+}
+
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
