@@ -2,6 +2,11 @@
   background-color: var(--colors-todos);
   border-radius: 0.3rem;
   box-shadow: 0 0 0.5rem var(--colors-shadow);
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
 
   .todosList {
     color: var(--colors-todoTitle);
@@ -78,7 +83,7 @@
       }
 
       @media (max-width: 768px) {
-        padding: 0 0.625rem 3.125rem 0  ;
+        padding: 0 0.625rem 3.125rem 0;
       }
     }
   }

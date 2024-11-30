@@ -13,12 +13,14 @@
     border: 1px solid var(--colors-borderline);
     margin-left: 20px;
     margin-right: 20px;
+    pointer-events: auto;
   }
 
   .markedSubmitButton {
     @include styledButton();
     margin-left: 20px;
     margin-right: 20px;
+    pointer-events: auto;
   }
 
   .deleteButton {
@@ -30,6 +32,7 @@
     padding: 0;
     padding-right: 20px;
     cursor: pointer;
+    pointer-events: auto;
   }
 
   &:hover {

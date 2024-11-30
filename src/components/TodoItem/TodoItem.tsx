@@ -3,6 +3,7 @@ import checkMark from "../../assets/icon-check.svg";
 import deleteMark from "../../assets/icon-cross.svg";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { useState } from "react";
 
 interface TodoItemProps {
   currentTodoID: string;
@@ -19,8 +20,9 @@ const TodoItem: React.FC<TodoItemProps> = ({
   handleDeleteTodo,
   handleAsCompleted,
 }) => {
+  const [isDraggable, setIsDraggable] = useState(true);
   const { attributes, listeners, setNodeRef, transform, transition } =
-    useSortable({ id: currentTodoID });
+    useSortable({ id: currentTodoID, disabled: !isDraggable });
 
   const style = {
     transition,
@@ -35,7 +37,11 @@ const TodoItem: React.FC<TodoItemProps> = ({
       {...listeners}
       style={style}
     >
-      <button className={styled.deleteButton} onClick={handleDeleteTodo}>
+      <button
+        className={styled.deleteButton}
+        onClick={handleDeleteTodo}
+        onMouseDown={() => setIsDraggable((prev) => !prev)}
+      >
         <img src={deleteMark} alt="delete" />
       </button>
       <button
@@ -43,6 +49,7 @@ const TodoItem: React.FC<TodoItemProps> = ({
           isCompletedMark && styled.markedSubmitButton
         }`}
         onClick={handleAsCompleted}
+        onMouseDown={() => setIsDraggable((prev) => !prev)}
       >
         {isCompletedMark && <img src={checkMark} alt="checkMark" />}
       </button>
