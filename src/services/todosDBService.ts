@@ -21,7 +21,7 @@ interface ITodos {
 
 type TodosWithoutId = Omit<ITodos, "id">;
 
-export const useGetAllTodos = async (): Promise<ITodos[]> => {
+export const getAllTodos = async (): Promise<ITodos[]> => {
   const q = query(collection(db, "todos"), orderBy("createdAt"));
 
   try {
@@ -42,7 +42,7 @@ export const useGetAllTodos = async (): Promise<ITodos[]> => {
   }
 };
 
-export const useAddTodo = async (
+export const addTodo = async (
   e: React.FormEvent<HTMLFormElement>,
   inputValue: string
 ) => {
@@ -63,7 +63,7 @@ export const useAddTodo = async (
   }
 };
 
-export const useDeleteTodo = async (id: string) => {
+export const deleteTodo = async (id: string) => {
   try {
     await deleteDoc(doc(db, "todos", id));
   } catch (error: unknown) {
@@ -94,7 +94,7 @@ export const setAsCompleted = async (
   }
 };
 
-export const useDeleteCompletedTodos = async () => {
+export const deleteCompletedTodos = async () => {
   try {
     const q = query(collection(db, "todos"), where("isCompleted", "==", true));
     const querySnapshot = await getDocs(q);

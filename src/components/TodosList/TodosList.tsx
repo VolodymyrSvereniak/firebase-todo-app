@@ -1,7 +1,7 @@
 import styled from "./TodosList.module.scss";
 import {
-  useGetAllTodos,
-  useDeleteTodo,
+  getAllTodos,
+  deleteTodo,
   setAsCompleted,
 } from "../../services/todosDBService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -10,6 +10,10 @@ import TodosControls from "./TodosControls";
 import { useState } from "react";
 import { PulseLoader } from "react-spinners";
 import { closestCorners, DndContext } from "@dnd-kit/core";
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
 
 interface IUpdateTodoStatus {
   todoID: string;
@@ -22,7 +26,7 @@ const TodosList = () => {
 
   const { data, isLoading } = useQuery({
     queryKey: ["todos"],
-    queryFn: useGetAllTodos,
+    queryFn: getAllTodos,
     staleTime: Infinity,
   });
   console.log(data);
@@ -41,7 +45,7 @@ const TodosList = () => {
   const queryClient = useQueryClient();
 
   const { mutate: handleDeleteTodo } = useMutation({
-    mutationFn: (id: string) => useDeleteTodo(id),
+    mutationFn: (id: string) => deleteTodo(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
@@ -68,21 +72,27 @@ const TodosList = () => {
       {filteredTodos && filteredTodos?.length > 0 ? (
         <DndContext collisionDetection={closestCorners}>
           <ul className={styled.todosList}>
-            {filteredTodos?.map((todo) => (
-              <TodoItem
-                key={todo.id}
-                isCompletedMark={todo.isCompleted}
-                todoTitle={todo.title}
-                handleDeleteTodo={() => handleDeleteTodo(todo.id)}
-                handleAsCompleted={() =>
-                  handleAsCompleted({
-                    todoID: todo.id,
-                    selectCompletedID: !todo.isCompleted,
-                    setNonActiveStatus: !todo.isActive,
-                  })
-                }
-              />
-            ))}
+            <SortableContext
+              items={filteredTodos}
+              strategy={verticalListSortingStrategy}
+            >
+              {filteredTodos?.map((todo) => (
+                <TodoItem
+                  key={todo.id}
+                  currentTodoID={todo.id}
+                  isCompletedMark={todo.isCompleted}
+                  todoTitle={todo.title}
+                  handleDeleteTodo={() => handleDeleteTodo(todo.id)}
+                  handleAsCompleted={() =>
+                    handleAsCompleted({
+                      todoID: todo.id,
+                      selectCompletedID: !todo.isCompleted,
+                      setNonActiveStatus: !todo.isActive,
+                    })
+                  }
+                />
+              ))}
+            </SortableContext>
           </ul>
         </DndContext>
       ) : (

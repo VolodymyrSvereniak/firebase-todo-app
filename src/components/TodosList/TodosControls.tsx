@@ -1,6 +1,6 @@
 import styled from "./TodosList.module.scss";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useDeleteCompletedTodos } from "../../services/todosDBService";
+import { deleteCompletedTodos } from "../../services/todosDBService";
 
 interface ITodosControlsProps {
   filterTodos: string;
@@ -16,7 +16,7 @@ const TodosControls: React.FC<ITodosControlsProps> = ({
   const queryClient = useQueryClient();
 
   const { mutate } = useMutation({
-    mutationFn: () => useDeleteCompletedTodos(),
+    mutationFn: () => deleteCompletedTodos(),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
     },

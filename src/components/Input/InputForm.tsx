@@ -1,6 +1,6 @@
 import styled from "./InputForm.module.scss";
 import { useInputStore } from "./useInputStore";
-import { useAddTodo } from "../../services/todosDBService";
+import { addTodo } from "../../services/todosDBService";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const InputForm = () => {
@@ -11,7 +11,7 @@ const InputForm = () => {
 
   const { mutate: handleAddTodo } = useMutation({
     mutationFn: (e: React.FormEvent<HTMLFormElement>) =>
-      useAddTodo(e, inputValue),
+      addTodo(e, inputValue),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["todos"] });
       clearInputValue();
