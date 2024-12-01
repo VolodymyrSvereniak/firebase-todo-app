@@ -49,12 +49,13 @@ export const addTodo = async (
   e.preventDefault();
 
   try {
-    await addDoc(collection(db, "todos"), {
-      title: inputValue,
-      isActive: true,
-      isCompleted: false,
-      createdAt: serverTimestamp(),
-    } as TodosWithoutId);
+    inputValue.trim() !== "" &&
+      (await addDoc(collection(db, "todos"), {
+        title: inputValue,
+        isActive: true,
+        isCompleted: false,
+        createdAt: serverTimestamp(),
+      } as TodosWithoutId));
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error(error.message);

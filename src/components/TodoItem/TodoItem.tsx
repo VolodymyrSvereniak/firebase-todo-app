@@ -24,6 +24,11 @@ const TodoItem: React.FC<TodoItemProps> = ({
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: currentTodoID, disabled: !isDraggable });
 
+  const handleDisableDragging = (e: React.MouseEvent, action: boolean) => {
+    e.stopPropagation();
+    setIsDraggable(action);
+  };
+
   const style = {
     transition,
     transform: CSS.Transform.toString(transform),
@@ -40,7 +45,8 @@ const TodoItem: React.FC<TodoItemProps> = ({
       <button
         className={styled.deleteButton}
         onClick={handleDeleteTodo}
-        onMouseDown={() => setIsDraggable((prev) => !prev)}
+        onMouseOver={(e) => handleDisableDragging(e, false)}
+        onMouseOut={(e) => handleDisableDragging(e, true)}
       >
         <img src={deleteMark} alt="delete" />
       </button>
@@ -49,7 +55,8 @@ const TodoItem: React.FC<TodoItemProps> = ({
           isCompletedMark && styled.markedSubmitButton
         }`}
         onClick={handleAsCompleted}
-        onMouseDown={() => setIsDraggable((prev) => !prev)}
+        onMouseOver={(e) => handleDisableDragging(e, false)}
+        onMouseOut={(e) => handleDisableDragging(e, true)}
       >
         {isCompletedMark && <img src={checkMark} alt="checkMark" />}
       </button>

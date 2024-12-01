@@ -10,6 +10,7 @@ import TodosControls from "./TodosControls";
 import { useState } from "react";
 import { PulseLoader } from "react-spinners";
 import { closestCorners, DndContext } from "@dnd-kit/core";
+import { restrictToParentElement } from "@dnd-kit/modifiers";
 import {
   SortableContext,
   verticalListSortingStrategy,
@@ -70,7 +71,7 @@ const TodosList = () => {
   return (
     <div className={styled.container}>
       {filteredTodos && filteredTodos?.length > 0 ? (
-        <DndContext collisionDetection={closestCorners}>
+        <DndContext collisionDetection={closestCorners} modifiers={[restrictToParentElement]}>
           <ul className={styled.todosList}>
             <SortableContext
               items={filteredTodos}
